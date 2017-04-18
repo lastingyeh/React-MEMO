@@ -1,62 +1,77 @@
 ### Immutable vs. Object.assign vs. spread-operator
 
-#### Object.assign
+#### 1. Object.assign
 
   1.1 Copy staff1 to newStaff1
+  
         let staff1 = {title:['manager','sales'],name:'jack',isOn:{in:true}};
+        
         let newStaff1 = Object.assign({},staff1);
         
   1.2.*Modify newStaff1:
+  
         newStaff1.isOn.in = false;
 
   1.3.*Output Error
+  
         -> staff1.isOn.in = false
+        
         -> newStaff1.isOn.in = false
+        
+![alt tag](https://github.com/lastingyeh/React-MEMO/blob/master/ImmutableMemo/staff1.jpeg)
 
-      *refs change by deeply modify  
+#### 2. Use Spread-Operator {...}
 
-#### Use Spread-Operator {...}
-
-  1.1 Copy staff2 to new newStaff2
-				let staff2 = {title:['manager','sales'],name:'jack',isOn:{in:true}};
+  2.1 Copy staff2 to new newStaff2
+		
+        let staff2 = {title:['manager','sales'],name:'jack',isOn:{in:true}};
+        
         let newStaff2 = {...staff2};
         
-  1.2 *Modify newStaff:
-				newStaff2.isOn.in = false;
+  2.2 *Modify newStaff:
+				
+	    newStaff2.isOn.in = false;
         
-  1.3.*Output Error
+  2.3.*Output Error
+  
         -> staff2.isOn.in = false
+        
         -> newStaff2.isOn.in = false 
+        
+![alt tag](https://github.com/lastingyeh/React-MEMO/blob/master/ImmutableMemo/staff2.jpeg)
 
-#### Use Immutable
+#### 3. Use Immutable
 
-  1.1 Create Immutable from JS
+  3.1 Create Immutable from JS
+  
         let staff3 = Immutable.fromJS({title:['manager','sales'],name:'jack',isOn:{in:true}});
 
-  1.2 Modify staff3.isOn.in = fales,and it pointed to newStaff3
+  3.2 Modify staff3.isOn.in = false,and it pointed to newStaff3
+  
         let newStaff3 = staff3.setIn(['isOn','in'],false);
 
-  1.3 *Back to JS and Output Expected
+  3.3 *Back to JS and Output Expected
+  
         staff3.toJS() -> staff3.isOn.in = true
+        
         newStaff3.toJS() -> newStaff3.isOn.in = false
+        
+![alt tag](https://github.com/lastingyeh/React-MEMO/blob/master/ImmutableMemo/staff3.jpeg)
 
+#### 4. Summary 
 
-#### summary 
-
-  1.1 use object.assign || {...} 
+  4.1 Use object.assign || {...} 
       
-      -> if you want to modify props of Object deeply 
+        -> if you want to modify props of Object deeply 
       
-      -> use 'Object.assign({},staff1,isOn:{in:false})' -> correct (when it created)
+        -> use 'Object.assign({},staff1,isOn:{in:false})' -> correct (when it created)
 
-      -> don't use 'newStaff1.isOn.in = false' -> staff1 modified unexpected indirectly 
+        -> don't use 'newStaff1.isOn.in = false' -> staff1 modified unexpected indirectly 
 
-  1.2 use Immutable
+  4.2 Use Immutable
 
-      -> Create Immutable Object 
+        -> Create Immutable Object by fromJS()
 
-      -> Modify and set newObject
+        -> Modify and set newObject
 
-      -> Back to JS() for use
-
-      -> Always Correct
+        -> Back to object by JS() for use
